@@ -1,0 +1,138 @@
+.toggle-all {
+	width: 1px;
+	height: 1px;
+	border: none; /* Mobile Safari */
+	opacity: 0;
+	position: absolute;
+	right: 100%;
+	bottom: 100%;
+}
+
+.toggle-all + label:before {
+	content: '❯';
+	font-size: 22px;
+	color: #e6e6e6;
+	padding: 10px 27px 10px 27px;
+}
+
+.toggle-all:checked + label:before {
+	color: #737373;
+}
+
+.labaelChangeInput{
+	
+	font-family: inherit;
+	border: none;
+	color: inherit;
+	font-size: 22px;
+	
+	padding: 0;
+	margin: 0;
+	width: 90%;
+	
+
+}
+.todo-list li .view {
+	position: relative;
+}
+
+.todo-list li label .description {
+	display: flex;
+	align-items: center;
+	font-size: 13px;
+	color: gray;
+	width: 50%;
+}
+.todo-list li label .title {
+	word-break: break-all;
+	display: block;
+	line-height: 1.2;
+	transition: color 0.4s;
+	font-weight: 400;
+	color: #4d4d4d;
+}
+.todo-list li.completed label .title {
+	color: #cdcdcd;
+	text-decoration: line-through;
+}
+
+
+
+/*добавка */
+.todo-list li .icon {
+	width: 30px;
+	height: 40px;
+	font-size: 34px;
+	color: #cc9a9a;
+	margin: auto 0;
+	transition: color 0.2s ease-out;
+	cursor: pointer;
+}
+
+.todo-list li .icon:hover {
+	color: #af5b5e;
+}
+
+.todo-list li .icon-destroy {
+	position: absolute;
+	top: 0;
+	bottom: -3px;
+	right: 10px;
+}
+
+.todo-list li .icon-destroy:after {
+	content: '×';
+}
+
+.todo-list li .icon-edit {
+	position: absolute;
+	top: 0;
+	bottom: -3px;
+	font-size: 19px;
+	right: 45px;
+}
+
+.todo-list li .icon-edit:after {
+	content: '✎';
+}
+
+.todo-list li .icon-pause,
+.todo-list li .icon-play {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	/* margin-right: 10px; */
+	margin-left: 8px;
+	display: flex;
+	align-items: center;
+}
+
+.todo-list li .icon-play {
+	font-size: 15px;
+}
+.time-span{
+	margin-left: 10px;
+	text-align: center;
+	display: block;
+	height: 100%
+}
+.icon-pause:after {
+	content: '⏸';
+	
+
+}
+
+.icon-play:after {
+	content: '▶';
+
+}
+
+.todo-list li .edit {
+	display: none;
+}
+
+.todo-list li.editing:last-child {
+	margin-bottom: -1px;
+}
+
+

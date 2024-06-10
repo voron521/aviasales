@@ -1,0 +1,211 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+	font-family: 'Open Sans', sans-serif;
+	
+  }
+
+.aviasales{
+	width: 770px;
+	min-height: 1250px;
+	background-color: F3F7FA;
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	background-color: #F3F7FA;
+	
+}
+
+.header{
+	height: 120px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+.main-div{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	padding: 8px;
+	
+}
+.from_checkbox{
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	max-width: 232px;
+	height: 252px;
+	border-radius: 5px;
+	padding: 20px;
+	font-size: 12px;
+	position: relative;
+}
+.checkbox_inp{
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	border: 0;
+	padding: 0;
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+
+
+}
+.label_form::before{
+	display: block;
+	content: '';
+	height: 20px;
+	width: 20px;
+	
+	position: relative;
+	left: 20px;
+	z-index: 20;
+	border: 1px solid #9ABBCE;
+	border-radius: 2px;
+	left: -10px;
+}
+
+.label_form::after{
+	display: block;
+	content: '';
+	height: 12px;
+	width: 12px;
+	position: absolute;
+	left: 22px;
+	z-index: 20;
+	border: 1px solid #2196F3;
+	transform: rotate(-130deg);
+	margin-bottom: 9px;
+	clip-path: rect(0 50% 90% 0);
+	transform: scale(0);
+}
+.checkbox_inp:checked + .label_form::after{
+    transform: rotate(-130deg) scale(1);
+
+}
+
+.checkbox_inp:checked + .label_form::before{
+    border: 1px solid #2196F3;
+
+}
+
+
+.label_form{
+	// margin-top: 20px;
+	font-size: 13px;
+	display: flex;
+	align-items: center;
+	margin-left: 10px;
+	height: 40px;
+}
+
+.left_body{
+	width: 33%;
+	margin-right: 20px;
+}
+
+.right_body{
+	width: 65%;
+	// background-color: orange;
+	
+}
+.ticket{
+	width: 100%;
+	height: 184px;
+	background-color: #FFFFFF;
+	margin-bottom: 20px;
+	padding: 20px;
+	border-radius: 5px;
+
+	
+}
+.coast_ticket{
+	color: #2196F3;
+	font-size: 24px;
+}
+.choose_price_option{
+	margin-bottom: 20px;
+}
+
+.header_part_ticket{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+}
+
+.middle_part_ticket{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+.middle_ticket_txt{
+	display: flex;
+	flex-direction: column;
+}
+
+.span_ticket{
+	line-height: 21px;
+}
+
+.span_ticket_top{
+	color: #A0B0B9;
+	font-size: 12px;
+}
+
+.right_middle_ticket{
+	margin-right: 40px;
+	width: 20%;
+}
+
+.bottom_part_ticket{
+	display: flex;
+	justify-content: space-between;
+}
+
+.span_ticket_bottom{
+	font-size: 14px;
+}
+
+.choose_price_option{
+	display: flex;
+	width: 100%;
+	height: 50px;
+	// background-color: pink;
+	// border: 1px solid #DFE5EC;
+	// border-radius: 5px;
+}
+
+.button_price_option{
+	flex-grow: 1;
+	font-size: 12px;
+	background-color: #FFFFFF;
+	border: none;
+	border-right: 1px solid #DFE5EC;
+	
+}
+
+.button_price_option:hover {
+    background-color:#2196F3;
+	border-right: 1px solid #2196F3;
+	color: white;
+  }
+
+.button_price_option_left{
+border-top-left-radius: 5px;
+border-bottom-left-radius: 5px;
+}
+
+.button_price_option_right{
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
