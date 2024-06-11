@@ -1,7 +1,7 @@
 import './Tickets.scss';
 import {useSelector, useDispatch} from 'react-redux'
 import { useEffect, useRef } from 'react';
-import {addNumberTransfers, selectFilteredTickets, addTicketsAfterFilter, selectSortTickets} from '../../store/AviaSalesSlice'
+import {addNumberTransfers, selectFilteredTickets, addTicketsAfterFilter, selectSortTickets, addNumberTransfersAllTickets, allTickets} from '../../store/AviaSalesSlice'
 import InfoStartFilter from '../InfoStartFilter'
 import Loader from '../loader'
 import InfoErrorFetch from '../InfoErrorFetch'
@@ -14,6 +14,8 @@ function Tickets() {
   const loadError = useSelector((state) => state.tickets.loadError); 
   const TicketAfterFilter = useSelector((state) => state.tickets.TicketAfterFilter); 
   const sortButton = useSelector((state) => state.tickets.sortButton); 
+  const allTicketsLoad = useSelector((state) => state.tickets.allTicketsLoad); 
+  const allTickets = useSelector((state) => state.tickets.allTickets)
   
   
 //   console.log("tickets: ", tickets)
@@ -22,22 +24,60 @@ function Tickets() {
 
   // }
   // let ticketsArr = tickets.tickets
+
   let ticketsArr = useSelector(selectFilteredTickets);
   dispatch(addTicketsAfterFilter(ticketsArr));
-  const sortedTickets = useSelector(selectSortTickets);
+  let sortedTickets = useSelector(selectSortTickets);
+  // if (allTicketsLoad) {
+  //   ticketsArr = allTickets
+  // }
+  
   // useEffect(() => {
   //   dispatch(addTicketsAfterFilter(ticketsArr));
   // }, [ticketsArr, dispatch]);
 
   useEffect(() => {
-    if (ticketsLoad && tickets.tickets && tickets.tickets.length > 0) {
-      tickets.tickets.forEach((ticket, index) => {
+    console.log("tickets.tickets в юс эффект:", tickets)
+    if (allTicketsLoad) {
+      allTickets.forEach((ticket, index) => {
         const numberOfTransfersThere = ticket.segments[0].stops.length;
         const numberOfTransfersBack = ticket.segments[1].stops.length;
+        // console.log("numberOfTransfersThere, numberOfTransfersBack, index", numberOfTransfersThere, numberOfTransfersBack, index)
         dispatch(addNumberTransfers({ numberOfTransfersThere, numberOfTransfersBack, index }));
+      // console.log("вот что передаем в addNumberTransfersAllTickets:", allTickets)
+      // sortedTickets = addNumberTransfersAllTickets(allTickets)
+      // sortedTickets.forEach((ticket, index) => {
+      //   const numberOfTransfersThere = ticket.segments[0].stops.length;
+      //   const numberOfTransfersBack = ticket.segments[1].stops.length;
+      //   // console.log("numberOfTransfersThere, numberOfTransfersBack, index", numberOfTransfersThere, numberOfTransfersBack, index)
+      //   dispatch(addNumberTransfers({ numberOfTransfersThere, numberOfTransfersBack, index}));
+        
+      });
+      
+
+    } else if (ticketsLoad && tickets && tickets.length > 0) {
+      tickets.forEach((ticket, index) => {
+        const numberOfTransfersThere = ticket.segments[0].stops.length;
+        const numberOfTransfersBack = ticket.segments[1].stops.length;
+        // console.log("numberOfTransfersThere, numberOfTransfersBack, index", numberOfTransfersThere, numberOfTransfersBack, index)
+        dispatch(addNumberTransfers({ numberOfTransfersThere, numberOfTransfersBack, index }));
+        
+        
       });
     }
-  }, [ticketsLoad]);
+
+ 
+    // if (ticketsLoad && tickets && tickets.length > 0) {
+    //   tickets.forEach((ticket, index) => {
+    //     const numberOfTransfersThere = ticket.segments[0].stops.length;
+    //     const numberOfTransfersBack = ticket.segments[1].stops.length;
+    //     // console.log("numberOfTransfersThere, numberOfTransfersBack, index", numberOfTransfersThere, numberOfTransfersBack, index)
+    //     dispatch(addNumberTransfers({ numberOfTransfersThere, numberOfTransfersBack, index }));
+        
+        
+    //   });
+    // }
+  }, [ticketsLoad, tickets, allTicketsLoad]);
 
   // useEffect(() => {
    
@@ -51,13 +91,15 @@ function Tickets() {
   // }, [ticketsLoad])
   let MakeTicketsElem = false
   // console.log("ticketsArr:::",ticketsArr)
-  if (ticketsArr !== undefined) {
+  if (sortedTickets !== undefined) {
+    console.log("а вот sortedTickets уже для рендера",sortedTickets)
+    
     MakeTicketsElem = sortedTickets.map((ticket, index) => {
     
       // MakeTicketsElem = ticketsArr.map((ticket, index) => {
-      const numberOfTransfersThere = ticket.segments[0].stops.length
-      const numberOfTransfersBack = ticket.segments[1].stops.length
-      dispatch(addNumberTransfers({ numberOfTransfersThere, numberOfTransfersBack, index}));
+      // const numberOfTransfersThere = ticket.segments[0].stops.length
+      // const numberOfTransfersBack = ticket.segments[1].stops.length
+      // dispatch(addNumberTransfers({ numberOfTransfersThere, numberOfTransfersBack, index}));
       let startTImethere = ticket.segments[0].date // время старта туда
       let flightTimethere = ticket.segments[0].duration; //время в полете туда
       let startTImeback = ticket.segments[1].date; // время возврата обратно
@@ -175,11 +217,10 @@ function Tickets() {
     }
     return <Loader />
   }
+   
+  let resultArrToRender = MakeTicketsElem.slice(0, 6)
 
-  
-
-
-  return <>{MakeTicketsElem ? MakeTicketsElem : 'гружу'}</>;
+  return <>{resultArrToRender ? resultArrToRender : 'гружу'}</>;
 }
 
 export default Tickets;
