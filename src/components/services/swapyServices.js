@@ -23,8 +23,7 @@ export default class SwapyServices extends Component {
   // _apiBaseGetMovieMyReit = '`https://api.themoviedb.org/3/movie/${movieId}/account_states?api_key=YOUR_API_KEY&session_id=${sessionId}`'
   apiBase = 'https://aviasales-test-api.kata.academy/search';
   // apiSearch = 'https://aviasales-test-api.kata.academy/tickets?searchId=${id}'
-  apiSearch = 'https://aviasales-test-api.kata.academy/tickets?searchId='
-  
+  apiSearch = 'https://aviasales-test-api.kata.academy/tickets?searchId=';
 
   options = {
     method: 'GET',
@@ -53,10 +52,9 @@ export default class SwapyServices extends Component {
   //   if (!tickets.ok) {
   //     return false
   //     // throw new Error(`запрос не получился по url:${this.apiSearch}${result.searchId} он завершился со статусом: ${tickets.status}`);
-      
+
   //   }
   //   return tickets.json();
-
 
   //   // return res.json();
   // }
@@ -68,23 +66,21 @@ export default class SwapyServices extends Component {
     const result = await res.json();
     const tickets = await fetch(`${this.apiSearch}${result.searchId}`);
     if (!tickets.ok) {
-      throw new Error(`запрос не получился по url:${this.apiSearch}${result.searchId} он завершился со статусом: ${tickets.status}`);
+      throw new Error(
+        `запрос не получился по url:${this.apiSearch}${result.searchId} он завершился со статусом: ${tickets.status}`
+      );
     }
     return tickets.json();
   }
-
 
   // await fetch(this.apiBase)
   //   .then((res) => {
   //     if (!res.ok) {
   //       throw new Error(`запрос не получился по url:${this.apiBase} он завершился со статусом: ${res.status}`);
   //     }
-  //     return res 
+  //     return res
   //   })
   //   then((res) =>{
   //     return res.json();
   //   })
-
-
- 
 }

@@ -1,8 +1,8 @@
-import {configureStore} from '@reduxjs/toolkit'
-import AviaSalesReducer from './AviaSalesSlice'
+import { configureStore } from '@reduxjs/toolkit';
+import AviaSalesReducer from './AviaSalesSlice';
 
 export default configureStore({
-    reducer: {
-        tickets: AviaSalesReducer,
-    } 
-})
+  reducer: {
+    tickets: AviaSalesReducer,
+  },
+});

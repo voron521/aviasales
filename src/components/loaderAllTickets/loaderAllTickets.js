@@ -14,28 +14,27 @@ function LoaderAllTickets() {
   };
   const content = <div style={contentStyle} />;
   return (
-    <div className='loader_all_tickets' >
+    <div className="loader_all_tickets">
       <Flex gap="small" vertical>
-      <Flex gap="small">
-        {/* <Spin tip="Loading" size="small">
+        <Flex gap="small">
+          {/* <Spin tip="Loading" size="small">
           {content}
         </Spin> */}
-        {/* <Spin tip="Loading">{content}</Spin> */}
-        <Spin tip="Loading" size="large">
-          
-          {content}
-          <span>Догружаем все билеты из базы</span>
-        </Spin>
-      </Flex>
-      {/* <Spin tip="Загружаем все билеты...">
+          {/* <Spin tip="Loading">{content}</Spin> */}
+          <Spin tip="Loading" size="large">
+            {content}
+            <span>Догружаем все билеты из базы</span>
+          </Spin>
+        </Flex>
+        {/* <Spin tip="Загружаем все билеты...">
         <Alert
           message="Alert message title"
           description="Further details about the context of this alert."
           type="info"
         />
       </Spin> */}
-    </Flex>
-  </div>
+      </Flex>
+    </div>
   );
 }
 
