@@ -27,12 +27,17 @@
     // "plugins": ["react", "prettier", "import", "flowtype"],
     "plugins": ["react", "import", "flowtype"],
     "rules": {
+      "react/jsx-no-useless-fragment": "off",
       
-      "indent": ["error", 2],
       "prettier/prettier": "error",
       "linebreak-style": [0, "unix"],
       "quotes": ["error", "single"],
       "semi": "off",
+      "default-case": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+      "indent": "off",
+      "no-param-reassign": "off",
+      
       // "semi": ["error", "never"],
       "react/react-in-jsx-scope": "off",
       "react/prop-types": 0,

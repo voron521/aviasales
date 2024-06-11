@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import './aviasales.scss';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
   setTickets,
@@ -13,7 +13,8 @@ import {
 import Tickets from '../Tickets';
 import FilterTickets from '../FiltersTickets';
 import SortPanel from '../SortPanel';
-import Mainlogo from '../AviaSales/Logo.png';
+
+import Mainlogo from './Logo.png';
 
 function Aviasales() {
   const dispatch = useDispatch();
@@ -24,45 +25,36 @@ function Aviasales() {
     const numberFetch = 10;
 
     function getTickets(numbersFetch) {
-        const currentSearchId = searchIdRef.current;
+      const currentSearchId = searchIdRef.current;
 
-        dispatch(fetchTickets(currentSearchId))
-          .unwrap()
-          .then((result) => {
-            if (currentSearchId === null) {
-              dispatch(setTickets(result.tickets.tickets));
-            }
-            if (!result.tickets.stop) {
-              console.log('записываю в массив все билеты т.к result.tickets.stop=', result.tickets.stop);
-              dispatch(setAllTickets(result.tickets.tickets));
-              // SaveAllTickets(result.tickets.tickets)
-            }
+      dispatch(fetchTickets(currentSearchId))
+        .unwrap()
+        .then((result) => {
+          if (currentSearchId === null) {
+            dispatch(setTickets(result.tickets.tickets));
+          }
+          if (!result.tickets.stop) {
+            dispatch(setAllTickets(result.tickets.tickets));
+          }
+          dispatch(addSearchId(result.searchId));
+          searchIdRef.current = result.searchId;
+          dispatch(loadError(false));
+          if (!result.tickets.stop && numbersFetch > 0) {
+            getTickets(numbersFetch);
+          } else if (result.tickets.stop) {
+            dispatch(setAllTicketsLoad());
+          }
+        })
+        .catch((error) => {
+          dispatch(loadError(true));
+          if (numbersFetch > 0) {
+            getTickets(numbersFetch - 1);
+          }
+        });
+    }
 
-            // dispatch(setAllTickets(result.tickets.tickets));
-            dispatch(addSearchId(result.searchId));
-            searchIdRef.current = result.searchId;
-            dispatch(loadError(false));
-            console.log('вот stop или не stop', result.tickets.stop);
-            if (!result.tickets.stop && s > 0) {
-              console.log('вот какой searchId я передаю', searchIdRef.current);
-              getTickets(numbersFetch);
-            } else if (result.tickets.stop) {
-              dispatch(setAllTicketsLoad());
-            }
-          })
-          .catch((error) => {
-            console.error('Ошибка при получении билетов:', error);
-            dispatch(loadError(true));
-            if (numbersFetch > 0) {
-              getTickets(numbersFetch - 1);
-            }
-          });
-      }
-
-      getTickets(numberFetch);
-    },
-    []
-  );
+    getTickets(numberFetch);
+  }, [dispatch]);
 
   return (
     <section className="aviasales">

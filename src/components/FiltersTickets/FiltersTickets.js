@@ -1,8 +1,8 @@
 import './FiltersTickets.scss';
 
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { changeFilter, allTicketsLoad } from '../../store/AviaSalesSlice';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { changeFilter } from '../../store/AviaSalesSlice';
 import LoaderAllTickets from '../loaderAllTickets';
 
 function FilterTickets() {
@@ -10,7 +10,6 @@ function FilterTickets() {
   const allTicketsLoad = useSelector((state) => state.tickets.allTicketsLoad);
 
   const ticketsFilters = useSelector((state) => state.tickets.filterTicket);
-  // console.log("ticketsFilters внутри компонента филтры", ticketsFilters)
   const checkFilter = (id) => {
     dispatch(changeFilter(id));
   };
@@ -26,7 +25,7 @@ function FilterTickets() {
           onChange={(event) => checkFilter(event.target.id)}
           checked={ticketsFilters.all}
         />
-        <label className="label_form" for="all">
+        <label className="label_form" htmlFor="all">
           Все
         </label>
         <input
@@ -36,7 +35,7 @@ function FilterTickets() {
           onChange={(event) => checkFilter(event.target.id)}
           checked={ticketsFilters.no}
         />
-        <label className="label_form" for="no">
+        <label className="label_form" htmlFor="no">
           Без пересадок
         </label>
         <input
@@ -46,7 +45,7 @@ function FilterTickets() {
           onChange={(event) => checkFilter(event.target.id)}
           checked={ticketsFilters.one}
         />
-        <label className="label_form" for="one">
+        <label className="label_form" htmlFor="one">
           1 пересадка
         </label>
         <input
@@ -56,7 +55,7 @@ function FilterTickets() {
           onChange={(event) => checkFilter(event.target.id)}
           checked={ticketsFilters.two}
         />
-        <label className="label_form" for="two">
+        <label className="label_form" htmlFor="two">
           2 пересадки
         </label>
         <input
@@ -66,7 +65,7 @@ function FilterTickets() {
           onChange={(event) => checkFilter(event.target.id)}
           checked={ticketsFilters.three}
         />
-        <label className="label_form" for="three">
+        <label className="label_form" htmlFor="three">
           3 пересадки
         </label>
       </form>

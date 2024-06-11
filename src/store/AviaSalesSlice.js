@@ -1,20 +1,16 @@
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
-import { parseJSON } from 'date-fns';
 
 export const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (searchId, { rejectWithValue }) => {
   const apiBase = 'https://aviasales-test-api.kata.academy/search';
   const apiSearch = 'https://aviasales-test-api.kata.academy/tickets?searchId=';
   let id = searchId;
-  console.log('id в танкусе', id);
 
   try {
     if (!id) {
-      console.log('id внутри танка: ', id);
       const res = await fetch(apiBase);
       if (!res.ok) {
         throw new Error(`Запрос не получился по url:${apiBase} он завершился со статусом: ${res.status}`);
       }
-      // state.searchId = result.searchId
       const result = await res.json();
       id = result.searchId;
     }
@@ -23,7 +19,6 @@ export const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (sear
     if (!tickets.ok) {
       throw new Error(`Запрос не получился по url:${apiSearch}${id} он завершился со статусом: ${tickets.status}`);
     }
-    // return tickets.json();
     return { tickets: await tickets.json(), searchId: id };
   } catch (error) {
     return rejectWithValue(error.message);
@@ -58,13 +53,12 @@ const AviaSalesSlice = createSlice({
 
     setAllTickets(state, action) {
       try {
-        let arrForAdd = action.payload.map((ticket) => {
-          console.log('ticket внутри сет алл', ticket);
+        const arrForAdd = action.payload.map((ticket) => {
           const numberOfTransfersThere = ticket.segments[0].stops.length;
           const numberOfTransfersBack = ticket.segments[1].stops.length;
 
           const segments = ticket.segments.map((segment, wayIndex) => {
-            const updatedSegment = { ...segment }; // создаем копию сегмента
+            const updatedSegment = { ...segment };
             if (updatedSegment.numberTransWord === undefined) {
               const numberOfTransfers = wayIndex === 0 ? numberOfTransfersThere : numberOfTransfersBack;
               updatedSegment.numberTrans = numberOfTransfers;
@@ -94,8 +88,6 @@ const AviaSalesSlice = createSlice({
             segments,
             AllTimeInTravel: travelTimeThere + travelTimeBack,
           };
-
-          console.log('вот ticket после логики добавления полей', updatedTicket);
           return updatedTicket;
         });
 
@@ -122,9 +114,6 @@ const AviaSalesSlice = createSlice({
     },
     changeSort(state, action) {
       state.sortButton = state.sortButton === action.payload ? null : action.payload;
-      // let sortArray = [...state.tickets.tickets].sort((ticketA, ticketB) =>   ticketA.price - ticketB.price)
-      // state.sortTicketCheapest = sortArray
-      // setSelected(prevSelected => prevSelected === id ? null : id);
     },
     addTicketsAfterFilter(state, action) {
       state.TicketAfterFilter = action.payload;
@@ -152,26 +141,24 @@ const AviaSalesSlice = createSlice({
       }
     },
     addNumberTransfers(state, action) {
-      // let wayIndex
       const { numberOfTransfersThere, numberOfTransfersBack, index, travelTimeThere, travelTimeBack } = action.payload;
 
-      function addNumtrans(wayIndex, numberOfTransfers, index) {
-        // if (!state.allTicketsLoad) {
-        if (state.tickets[index] && state.tickets[index].segments[wayIndex].numberTransWord === undefined) {
-          state.tickets[index].segments[wayIndex].numberTrans = numberOfTransfers;
-          state.tickets[index].AllTimeInTravel = travelTimeThere + travelTimeBack;
+      function addNumtrans(wayIndex, numberOfTransfers, indexs) {
+        if (state.tickets[indexs] && state.tickets[indexs].segments[wayIndex].numberTransWord === undefined) {
+          state.tickets[indexs].segments[wayIndex].numberTrans = numberOfTransfers;
+          state.tickets[indexs].AllTimeInTravel = travelTimeThere + travelTimeBack;
           switch (numberOfTransfers) {
             case 0:
-              state.tickets[index].segments[wayIndex].numberTransWord = 'без пересадок';
+              state.tickets[indexs].segments[wayIndex].numberTransWord = 'без пересадок';
               break;
             case 1:
-              state.tickets[index].segments[wayIndex].numberTransWord = 'одна пересадка';
+              state.tickets[indexs].segments[wayIndex].numberTransWord = 'одна пересадка';
               break;
             case 2:
-              state.tickets[index].segments[wayIndex].numberTransWord = 'две пересадки';
+              state.tickets[indexs].segments[wayIndex].numberTransWord = 'две пересадки';
               break;
             case 3:
-              state.tickets[index].segments[wayIndex].numberTransWord = 'три пересадки';
+              state.tickets[indexs].segments[wayIndex].numberTransWord = 'три пересадки';
               break;
           }
         }
@@ -198,16 +185,14 @@ export const selectFilteredTickets = createSelector(
     const filtDict = { 1: 'one', 2: 'two', 3: 'three', 0: 'no' };
     if (ticketsLoad) {
       if (allTicketsLoad && filterTicket.all) {
-        // allTicketsLoad
         return allTickets;
       }
-      // if (filterTicket.all || !allFilterFalse) {
       if (filterTicket.all) {
         return tickets;
       }
 
-      let ChosefilterArray = []; // one, two, three, no
-      for (let filter in filterTicket) {
+      const ChosefilterArray = []; // one, two, three, no
+      for (const filter in filterTicket) {
         if (filterTicket[filter]) {
           ChosefilterArray.push(filter);
         }
@@ -232,20 +217,19 @@ export const selectSortTickets = createSelector(
 
   (TicketAfterFilter, sortButton) => {
     if (sortButton === 'cheapest') {
-      let sortArray = [...TicketAfterFilter].sort((ticketA, ticketB) => ticketA.price - ticketB.price);
+      const sortArray = [...TicketAfterFilter].sort((ticketA, ticketB) => ticketA.price - ticketB.price);
       return sortArray;
-    } else if (sortButton === 'fastest') {
-      console.log(TicketAfterFilter);
-      let sortArray = [...TicketAfterFilter].sort(
+    }
+    if (sortButton === 'fastest') {
+      const sortArray = [...TicketAfterFilter].sort(
         (ticketA, ticketB) =>
           ticketA.segments[0].duration +
           ticketA.segments[1].duration -
           (ticketB.segments[0].duration + ticketB.segments[1].duration)
       );
       return sortArray;
-    } else {
-      return TicketAfterFilter;
     }
+    return TicketAfterFilter;
   }
 );
 
