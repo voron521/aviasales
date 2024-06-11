@@ -20,17 +20,15 @@ function Aviasales() {
 
   const searchIdRef = useRef(null);
 
-  useEffect(
-    () => {
-      const numberFetch = 10;
+  useEffect(() => {
+    const numberFetch = 10;
 
-      function getTickets(numberFetch) {
+    function getTickets(numbersFetch) {
         const currentSearchId = searchIdRef.current;
 
         dispatch(fetchTickets(currentSearchId))
           .unwrap()
           .then((result) => {
-            console.log('вот searchIdFromState внутри где работаю: ', currentSearchId);
             if (currentSearchId === null) {
               dispatch(setTickets(result.tickets.tickets));
             }
@@ -45,9 +43,9 @@ function Aviasales() {
             searchIdRef.current = result.searchId;
             dispatch(loadError(false));
             console.log('вот stop или не stop', result.tickets.stop);
-            if (!result.tickets.stop && numberFetch > 0) {
+            if (!result.tickets.stop && s > 0) {
               console.log('вот какой searchId я передаю', searchIdRef.current);
-              getTickets(numberFetch);
+              getTickets(numbersFetch);
             } else if (result.tickets.stop) {
               dispatch(setAllTicketsLoad());
             }
@@ -55,15 +53,15 @@ function Aviasales() {
           .catch((error) => {
             console.error('Ошибка при получении билетов:', error);
             dispatch(loadError(true));
-            if (numberFetch > 0) {
-              getTickets(numberFetch - 1);
+            if (numbersFetch > 0) {
+              getTickets(numbersFetch - 1);
             }
           });
       }
 
       getTickets(numberFetch);
     },
-    [] /*[dispatch]*/
+    []
   );
 
   return (
