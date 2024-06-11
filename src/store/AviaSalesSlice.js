@@ -93,7 +93,7 @@ const AviaSalesSlice = createSlice({
 
         state.allTickets = [...state.allTickets, ...arrForAdd];
       } catch (error) {
-        console.error('Ошибка в setAllTickets:', error);
+        /* empty */
       }
     },
 
