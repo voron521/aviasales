@@ -1,0 +1,72 @@
+import { useEffect } from 'react';
+import './Blog.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { Pagination } from 'antd';
+import SingUp from '../SingUp'
+import SingIn from '../SingIn'
+import { fetchPosts, setBlogs, setPage } from '../../store/BlogsSlice';
+import { selectblogs, selectLimitArticles, selectCurrentPage, selectTotalResults } from '../../store/selectors';
+import ArticleBlogs from '../ArticleBlogs';
+import Header from '../Header';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useParams,
+} from "react-router-dom";
+
+function Blog() {
+  
+  const dispatch = useDispatch();
+  const blogs = useSelector(selectblogs);
+  const limitArticles = useSelector(selectLimitArticles);
+  const currentPage = useSelector(selectCurrentPage);
+  const totalResults = useSelector(selectTotalResults);
+  
+  
+  useEffect(() => {
+    const offset = (currentPage - 1) * limitArticles;
+    dispatch(fetchPosts({ limitArticles, offset }))
+      .then((result) => {
+        dispatch(setBlogs(result));
+        console.log('вот результат с сервера:', result);
+      });
+    console.log('blogs это стэйт: ', blogs);
+  }, [dispatch, currentPage, limitArticles]);
+
+  const onChangePage = (page) => {
+    dispatch(setPage(page));
+  };
+
+
+
+  return (
+    <Router>
+      <div className="mainApp">
+        <Header />
+        <Routes>
+          <Route path="/articles/:slug" element={<ArticleBlogs />} />
+          <Route path="/signin" element={<SingIn />} />
+          <Route path="/signup" element={<SingUp />} />
+          <Route path="/" element={
+            <>
+                <ArticleBlogs />
+                <Pagination
+                className="pagination"
+                defaultCurrent={1}
+                total={totalResults}
+                pageSize={limitArticles}
+                onChange={onChangePage}
+              />
+            </>
+            
+        } />
+         
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default Blog;

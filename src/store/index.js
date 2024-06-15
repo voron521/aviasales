@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import AviaSalesReducer from './AviaSalesSlice';
+import BlogReducer from './BlogsSlice';
 
 export default configureStore({
   reducer: {
-    tickets: AviaSalesReducer,
+    blog: BlogReducer,
   },
 });
