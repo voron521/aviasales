@@ -9,10 +9,20 @@ import { setUserInfo } from '../../store/BlogsSlice';
 
 function Header() {
   const registrationUserInfo = useSelector(selectregistrationUserInfo);
+  
+  
   const dispatch = useDispatch();
   const logOut = () => {
     dispatch(setUserInfo(null));
+    if (localStorage.getItem('user')) {
+      localStorage.clear();
+      // localStorage.removeItem('user');
+    }
+    
   }
+  
+
+
 
   return (
     <div className="header">
@@ -22,8 +32,11 @@ function Header() {
       <div className="right_header">
           {registrationUserInfo? 
           <div className='user_info_block'>
+            <Link to="/new-article" className="create_article_button">Create article</Link>
+            <Link to="/edituser" className="header_edit_button">
             <span className='user_name'>{registrationUserInfo.username}</span>
-            <img className='userAvatar' src={userNoRegistAvatar} />
+            <img className='userAvatar' src={registrationUserInfo.image? registrationUserInfo.image : userNoRegistAvatar} />
+            </Link>
             <button className="header_button header_logout_button" onClick={logOut}>Log Out</button>
 
           </div>

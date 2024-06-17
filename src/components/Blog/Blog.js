@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Pagination } from 'antd';
 import SingUp from '../SingUp'
 import SingIn from '../SingIn'
-import { fetchPosts, setBlogs, setPage } from '../../store/BlogsSlice';
+import { fetchPosts, setBlogs, setPage, setregistrationNewUserError, setUserInfo } from '../../store/BlogsSlice';
 import { selectblogs, selectLimitArticles, selectCurrentPage, selectTotalResults } from '../../store/selectors';
 import ArticleBlogs from '../ArticleBlogs';
+import EditUser from '../EditUser'
 import Header from '../Header';
+import CreateArticle from '../CreateArticle'
 import {
   BrowserRouter as Router,
   Routes,
@@ -40,6 +42,17 @@ function Blog() {
   };
 
 
+  if (localStorage.getItem('user')) {
+
+    const storedUserJson = localStorage.getItem('user');
+    console.log("storedUserJson:", storedUserJson)
+    const storedUser = JSON.parse(storedUserJson);
+    dispatch(setregistrationNewUserError(false));
+    dispatch(setUserInfo(storedUser));
+  }
+
+
+
 
   return (
     <Router>
@@ -49,6 +62,8 @@ function Blog() {
           <Route path="/articles/:slug" element={<ArticleBlogs />} />
           <Route path="/signin" element={<SingIn />} />
           <Route path="/signup" element={<SingUp />} />
+          <Route path="/edituser" element={<EditUser />} />
+          <Route path="/new-article" element={<CreateArticle />} />
           <Route path="/" element={
             <>
                 <ArticleBlogs />

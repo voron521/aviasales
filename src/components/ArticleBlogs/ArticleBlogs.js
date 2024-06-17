@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './ArticleBlogs.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import {selectblogs, selectchoseArticle} from '../../store/selectors';
+import {selectblogs, selectchoseArticle, selectregistrationUserInfo} from '../../store/selectors';
 import like from './Vector.svg';
 import { Link, useParams } from 'react-router-dom';
 import {
@@ -10,15 +10,16 @@ import {
   fetchPosts,
   addSearchId,
   setAllTickets,
-  setAllTicketsLoad,
+  fetchDeleteArticle,
   setChoseArticle
   
   
 } from '../../store/BlogsSlice';
 
-setChoseArticle
+
 
 function ArticleBlogs() {
+    const userInfo = useSelector(selectregistrationUserInfo)
     const { slug } = useParams();
     const dispatch = useDispatch();
     const choseArticle = useSelector(selectchoseArticle);
@@ -46,9 +47,14 @@ function ArticleBlogs() {
         dispatch(setChoseArticle(slug))
         // console.log("slug", slug)
     }
+   const deleteArticle = (slugToDelete) => {
+    console.log("slugToDelete:", slugToDelete)
+        const apiKey = userInfo.token
+        console.log("slugToDelete:", slugToDelete, apiKey)
+        dispatch(fetchDeleteArticle({slugToDelete, apiKey}))
+   }
 
-
-    const blogs = useSelector(selectblogs);
+   const blogs = useSelector(selectblogs);
    console.log(blogs)
     const resultBlogs = blogs.map((blog) => {
         if (choseArticle && choseArticle!==blog.slug) {
@@ -74,16 +80,30 @@ function ArticleBlogs() {
                     </div>
                     <div className='right_artickl'>
                         <div className='right_artickl_text'>
-                            <span className='name_author'>
-                                {blog.author.username}
-                            </span>
-                            <span>
-                                {formatDate(blog.createdAt)}
-                            </span>
+                            <div className='name_and_picture_wrapper'>
+                                <div className='name_and_date_wrapper'>
+                                    <span className='name_author'>
+                                        {blog.author.username}
+                                    </span>
+                                    <span>
+                                        {formatDate(blog.createdAt)}
+                                    </span>
+                                </div>
+                                <div className='right_artickl_avatar'>
+                                    <img className='image_avatar' src={blog.author.image}/>
+                                </div>
+                                
+                            </div>
+             
+                            {userInfo.username===blog.author.username && slug ?
+                            <div className='button_article_wrapper'>
+                                <button className='article_button delete_article' onClick={()=>{deleteArticle(blog.slug)}}>delete</button>
+                                <button className='article_button edit_article'>edit</button>
+                            </div>
+                            : null}
+
                         </div>
-                        <div className='right_artickl_avatar'>
-                            <img className='image_avatar' src={blog.author.image}/>
-                        </div>
+
                         
                     </div>
                     

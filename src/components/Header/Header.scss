@@ -47,6 +47,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .right_header{
@@ -70,4 +71,33 @@
     font-size: 18px;
     margin-right: 13px;
 
+}
+
+
+.header_edit_button{
+    display: flex;
+    color: black;
+    text-decoration: none;
+    align-items: center;
+    font-size: 16px;
+}
+
+.create_article_button{
+    width: 112px;
+    height: 31px;
+    
+    font-size: 14px;
+    
+    border: 1px solid #52C41A;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #52C41A;
+    text-decoration: none;
+    display: flex;
+    margin-right: 27px;
+    text-decoration: none;
+    align-items: center;
+    font-size: 16px;
 }

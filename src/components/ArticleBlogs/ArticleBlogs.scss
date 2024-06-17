@@ -85,3 +85,45 @@
 .right_artickl_avatar{
     margin-left: 12px;
 }
+
+.button_article_wrapper{
+    display: flex;
+    justify-content: end;
+}
+
+.article_button{
+    height: 31px;
+    font-size: 14px;
+    transition: transform 0.02s ease-in-out;
+    background-color: white;
+    margin-top: 30px;
+
+}
+.article_button:active{
+    transform: scale(0.95);
+}
+
+.delete_article{
+    width: 78px;
+    border: 1px solid #F5222D;
+    border-radius: 5px;
+    color: #F5222D;
+    margin-right: 12px;
+
+}
+
+.edit_article{
+    width: 65px;
+    border: 1px solid #52C41A;
+    border-radius: 5px;
+    color: #52C41A;
+}
+
+.name_and_date_wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.name_and_picture_wrapper{
+    display: flex;
+}

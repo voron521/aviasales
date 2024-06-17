@@ -6,3 +6,6 @@ export const selectOffset = (state) => state.blog.offset;
 export const selectchoseArticle = (state) => state.blog.choseArticle;
 export const selectRegistrationNewUserError = (state) => state.blog.registrationNewUserError;
 export const selectregistrationUserInfo = (state) => state.blog.registrationUserInfo;
+export const selecTagsList = (state) => state.blog.tagsList;
+
+

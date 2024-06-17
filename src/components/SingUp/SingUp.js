@@ -29,12 +29,26 @@ function SingUp() {
     };
     try {
       const res = await dispatch(fetchRegistrationNewUser({ data }));
-      console.log("res:", res)
+      console.log("res.payload при создании:",res.payload.user.token)
       if (res.error) {
         dispatch(setregistrationNewUserError(true));
       } else {
+        
+        if (!localStorage.getItem('user')) {
+          data.token = res.payload.user.token
+          const userJson = JSON.stringify(data);
+          localStorage.setItem('user', userJson);
+          
+        }
+        // const userJson = JSON.stringify(data);
+        // localStorage.setItem('user', userJson);
+        const storedUserJson = localStorage.getItem('user');
+        const storedUser = JSON.parse(storedUserJson);
         dispatch(setregistrationNewUserError(false));
-        dispatch(setUserInfo(res.payload.user));
+        // dispatch(setUserInfo(res.payload.user));
+        dispatch(setUserInfo(storedUser));
+        
+
       }
     } catch (error) {
       console.error('Error registering new user:', error);

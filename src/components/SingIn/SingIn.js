@@ -16,6 +16,9 @@ function SingIn() {
   const dispatch = useDispatch();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const registrationUserInfo = useSelector(selectregistrationUserInfo);
+  const RegistrationNewUserError = useSelector(selectRegistrationNewUserError);
+
+ 
   const submitLogInUser = async (event) => {
     console.log("event",event)
     // event.preventDefault();
@@ -30,7 +33,25 @@ function SingIn() {
       if (res.error) {
         dispatch(setregistrationNewUserError(true));
       } else {
-        dispatch(setUserInfo(res.payload.user));
+        console.log("res который интересен",res)
+        const dataUserFromServer = {
+          username: res.payload.user.username,
+          email: res.payload.user.email,
+          password: event.password,
+          image: res.payload.user.image,
+          token: res.payload.user.token,
+
+
+        }
+
+        const userJson = JSON.stringify(dataUserFromServer);
+        localStorage.setItem('user', userJson);
+        const storedUserJson = localStorage.getItem('user');
+        const storedUser = JSON.parse(storedUserJson);
+        // dispatch(setUserInfo(storedUser));
+        dispatch(setUserInfo(dataUserFromServer));
+        
+        // dispatch(setUserInfo(res.payload.user));
         dispatch(setregistrationNewUserError(false));
 
       }
@@ -77,7 +98,8 @@ function SingIn() {
       <button className='login_button' type="submit">Login</button>
       <span className='signin_span'>Don’t have an account?<Link to="/signup" className="signin_link">Sign Up</Link></span>
       <span className='error_registration'>{registrationUserInfo ? `${registrationUserInfo.username} Вы успешно вошли в аккаунт` : null}</span>
-
+      <span className='error_registration'>{RegistrationNewUserError ? `Логин или пароль не верный` : null}</span>
+      
 
     </form>
   );
