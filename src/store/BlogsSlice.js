@@ -124,6 +124,44 @@ export const fetchNewArticle = createAsyncThunk(
   }
 );
 
+export const fetchUpdateArticle = createAsyncThunk(
+  'users/fetchUpdateArticle',
+  async ({ data, slug, apiKey }, { rejectWithValue }) => {
+    console.log("slug in fetchUpdateArticle: ", slug);
+
+    const optionsUpdateArticle = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${apiKey}`,
+      },
+      body: JSON.stringify({
+        "article": {
+          "title": data.article.title,
+          "description": data.article.description,
+          "body": data.article.description,
+          "tagList": [
+            ...data.article.tags,
+          ]
+        }
+      })
+    };
+
+    console.log("optionsUpdateArticle", optionsUpdateArticle);
+    const apiBase = `https://blog.kata.academy/api/articles/${slug}`;
+    try {
+      const res = await fetch(apiBase, optionsUpdateArticle);
+      if (!res.ok) {
+        throw new Error(`Request failed with status: ${res.status}`);
+      }
+      const result = await res.json();
+      return result;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fetchDeleteArticle = createAsyncThunk(
   'users/fetchDeleteArticle',
   async ({ slugToDelete, apiKey }, { rejectWithValue }) => {
@@ -200,6 +238,7 @@ const BlogSlice = createSlice({
     registrationUserInfo: null,
     myArticles: null,
     tagsList: [],
+    deleteArticleWindow: false,
     
   },
   reducers: {
@@ -217,8 +256,7 @@ const BlogSlice = createSlice({
     },
     setNewUserRegistrationInfo(state, action) {
       state.newUserRegistrationInfo = action.payload;
-      // state.registrationUserInfo = action.payload;
-      // newUserRegistrationInfo
+
     },
     setregistrationNewUserError(state, action) {
       state.registrationNewUserError = action.payload;
@@ -236,7 +274,12 @@ const BlogSlice = createSlice({
       if (action.payload === 'clean'){
         state.tagsList = []
       } else {
-        state.tagsList = [...state.tagsList, action.payload];
+        if (Array.isArray(action.payload)) {
+          state.tagsList = [...state.tagsList, ...action.payload];
+        } else {
+          state.tagsList = [...state.tagsList, action.payload];
+        }
+        
       }
       
     },
@@ -246,13 +289,15 @@ const BlogSlice = createSlice({
     setTagsListDeleteItem(state, action) {
       state.tagsList = state.tagsList.filter((_, index) => index !== action.payload);
 
+    },
+    setDeleteArticleWindow(state) {
+      state.deleteArticleWindow = !state.deleteArticleWindow
     }
     
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.fulfilled, (state, action) => {
-        console.log("action.payload В extraReducers", action.payload)
         state.blogs = action.payload.articles;
         state.totalResults = action.payload.articlesCount;
         state.blogsLoad = true;
@@ -264,6 +309,6 @@ const BlogSlice = createSlice({
   }
 });
 
-export const { setBlogs, setPage, setChoseArticle, setregistrationNewUserError, setUserInfo, setMyArticles, setTagsList, setTagsListChangeItem, setTagsListDeleteItem } = BlogSlice.actions;
+export const { setBlogs, setPage, setChoseArticle, setregistrationNewUserError, setUserInfo, setMyArticles, setTagsList, setTagsListChangeItem, setTagsListDeleteItem, setDeleteArticleWindow } = BlogSlice.actions;
 
 export default BlogSlice.reducer;

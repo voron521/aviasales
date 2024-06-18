@@ -7,5 +7,11 @@ export const selectchoseArticle = (state) => state.blog.choseArticle;
 export const selectRegistrationNewUserError = (state) => state.blog.registrationNewUserError;
 export const selectregistrationUserInfo = (state) => state.blog.registrationUserInfo;
 export const selecTagsList = (state) => state.blog.tagsList;
+export const selectDeleteArticleWindow = (state) => state.blog.deleteArticleWindow;
+// export const selectArticleBySlug = (slug) => (state) => {
+//     return state.blogs.articles.find(article => article.slug === slug);
+// };
 
-
+export const selectArticleBySlug = (slug) => (state) => {
+    return state.blog.blogs.find(article => article.slug === slug);
+};

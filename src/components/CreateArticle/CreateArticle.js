@@ -3,18 +3,21 @@ import './CreateArticle.scss';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { LoadingOutlined } from '@ant-design/icons';
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect} from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { fetchLogInUser, setUserInfo, setregistrationNewUserError, fetchEditUser, setMyArticles, fetchNewArticle, setTagsList, setTagsListChangeItem, setTagsListDeleteItem } from '../../store/BlogsSlice';
+import { fetchLogInUser, setUserInfo, setregistrationNewUserError, fetchEditUser, setMyArticles, fetchNewArticle, setTagsList, setTagsListChangeItem, setTagsListDeleteItem, fetchUpdateArticle } from '../../store/BlogsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { selecTagsList, selectRegistrationNewUserError, selectregistrationUserInfo } from '../../store/selectors';
+import { selecTagsList, selectRegistrationNewUserError, selectregistrationUserInfo, selectArticleBySlug } from '../../store/selectors';
 
 function CreateArticle() {
+  const { slug } = useParams();
+  console.log( "slug в Create_article: ",slug )
   const tagsList = useSelector(selecTagsList);
   const dispatch = useDispatch();
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm();
   const registrationUserInfo = useSelector(selectregistrationUserInfo);
+  const article = useSelector(selectArticleBySlug(slug));
 
   const addNewArticle = async (event) => {
     const data = {
@@ -27,7 +30,13 @@ function CreateArticle() {
     };
     try {
       const apiKey = registrationUserInfo.token;
-      const res = await dispatch(fetchNewArticle({ data, apiKey }));
+      let res
+      if (slug) {
+        res = await dispatch(fetchUpdateArticle({ data, slug, apiKey }));
+      } else {
+        res = await dispatch(fetchNewArticle({ data, apiKey }));
+      }
+      
       dispatch(setTagsList('clean'));
       if (res.error) {
       } else {
@@ -43,6 +52,14 @@ function CreateArticle() {
       console.error('Error edit user:', error);
     }
   };
+  useEffect(() => {
+    if (article) {
+      setValue('title', article.title);
+      setValue('description', article.description);
+      setValue('text', article.body);
+      dispatch(setTagsList(article.tagList));
+    }
+  }, [article, setValue, dispatch]);
   
   const addTag = () => {
     const tagValue = watch('tagadd');
@@ -67,7 +84,8 @@ function CreateArticle() {
   console.log("tagsList, tagsList.length", tagsList, tagsList.length)
   return (
     <form className='create_article_form' onSubmit={handleSubmit(addNewArticle)}>
-      <span className='login_form_title'>Create new article</span>
+      {slug ? <span className='login_form_title'>Edit article</span> : <span className='login_form_title'>Create new article</span>}
+     
 
       <label className="label_form" htmlFor="title">
           Title

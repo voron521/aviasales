@@ -59,11 +59,13 @@ function Blog() {
       <div className="mainApp">
         <Header />
         <Routes>
+        
           <Route path="/articles/:slug" element={<ArticleBlogs />} />
           <Route path="/signin" element={<SingIn />} />
           <Route path="/signup" element={<SingUp />} />
           <Route path="/edituser" element={<EditUser />} />
           <Route path="/new-article" element={<CreateArticle />} />
+          <Route path="/articles/:slug/edit" element={<CreateArticle />} />
           <Route path="/" element={
             <>
                 <ArticleBlogs />
